@@ -1,10 +1,17 @@
-body {
-  font-family: "Roboto", Arial, sans-serif;
-  font-size: 14px;
+body, ul {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 13px;
   color: #111;
 }
 
-h1 { font-size: 156% }
+li {
+  margin: 6px 0;
+}
+
+h1 {
+  font-family: 'Lucida Grande', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+  font-size: 156%
+}
 
 h1 img {
   margin: 1px 5px 0 1px;
@@ -12,9 +19,10 @@ h1 img {
 }
 
 h2 {
-  border-top: 1px solid #9cc2ef;
+  border-bottom: 1px solid #9cc2ef;
   background-color: #ebeff9;
-  padding: 3px 5px;
+  padding: 3px 0px;
+  font-family: 'Lucida Grande', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
   font-size: 100%
 }
 
@@ -38,6 +46,23 @@ button {
   font-size: 90%;
 }
 
-a {
-  font-size: 90%;
+.warning {
+	color: red;
+}
+
+label {
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 2px;
+}
+
+input[type=checkbox] {
+  vertical-align: middle;
+  position: relative;
+  bottom: 1px;
+  margin-left: 1px;
+}
+
+input {
+  display: inline-block;
 }

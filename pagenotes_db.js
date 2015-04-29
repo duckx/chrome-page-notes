@@ -1,19 +1,8 @@
 /*
- * Copyright 2012 Google Inc. All Rights Reserved.
+ * Copyright 2012 Manu Garg.
  * @author manugarg@google.com (Manu Garg)
-
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * 
+ * Interface to page notes database in localStorage.
  */
 
 var PageNotes = function() {};
@@ -33,10 +22,16 @@ PageNotes.prototype.get = function(key) {
   return obj[key];
 };
 
+PageNotes.prototype.getNotesObj = function(key) {
+  var obj = this.getAll();
+  if (!obj) return undefined;
+  return obj[key];
+};
+
 PageNotes.prototype.getAll = function() {
   var src = this.getSource();
   return src ? JSON.parse(src) : {};
-}
+};
 
 PageNotes.prototype.set = function(key, value) {
   var src = this.getSource();
@@ -55,6 +50,13 @@ PageNotes.prototype.set = function(key, value) {
   if (newFormat) {
     obj[key] = [value, new Date()];
   }
+  this.setSource(obj);
+};
+
+PageNotes.prototype.setNotesObj = function(key, objValue) {
+  var src = this.getSource();
+  var obj = src ? JSON.parse(src) : {};
+  obj[key] = objValue;
   this.setSource(obj);
 };
 

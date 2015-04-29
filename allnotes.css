@@ -1,9 +1,14 @@
 table, #tag-cloud{
   min-width: 600px;
   max-width: 80%;
+  display: block;
   table-layout: fixed;
   word-wrap: break-word;
   word-break: break-all;
+}
+
+td.notesTD {
+  min-width: 200px;
 }
 
 /* Don't collpase multiple whitespace into one for date div. */
@@ -12,8 +17,18 @@ table, #tag-cloud{
 }
 
 .buttons {
-  width: 150px;
-  text-align: center;
+  width: 200px;
+  word-wrap: normal;
+  word-break: normal;
+}
+
+button.editB, button.deleteB, button.decryptB {
+  margin-right: 5px;
+  width: 60px;
+}
+
+button.decryptB {
+  color: green;
 }
 
 #tag-cloud {

@@ -29,7 +29,7 @@ cat > .git/info/attributes << EOF
 EOF
 
 # Create archive for the base version
-git archive --format=tar release-$base_version | (cd $baseVersionDir && tar xf - --exclude tools)
+git archive --format=tar release-$base_version | (cd $baseVersionDir && tar xf - --exclude tools --exclude .gitignore)
 #git archive -o $baseVersionDir/1.tar.gz release-$base_version
 cd $baseVersionDir
 #tar xzf 1.tar.gz; rm 1.tar.gz
@@ -40,7 +40,7 @@ zip -r ../cpn-base.zip .
 cd -
 
 # Create archive for the current version
-git archive --format=tar HEAD | (cd $testVersionDir && tar xf - --exclude tools)
+git archive --format=tar HEAD | (cd $testVersionDir && tar xf - --exclude tools --exclude .gitignore)
 #git archive -o $testVersionDir/1.tar.gz HEAD
 cd $testVersionDir
 #tar xzf 1.tar.gz; rm 1.tar.gz

@@ -219,7 +219,7 @@ OAuth2.prototype.isAccessTokenExpired = function () {
   // Provide a 30 seconds buffer to the actual expiry time. This is important
   // to make sure that we don't assume that the token is good exactly at the
   // second when it's going to expire.
-  var expiresIn = (data.expiresIn - 30) * 1000
+  var expiresIn = (data.expiresIn - 30) * 1000;
   return (new Date().valueOf() - data.accessTokenDate) > expiresIn;
 };
 

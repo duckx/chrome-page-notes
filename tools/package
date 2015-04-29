@@ -53,7 +53,7 @@ git_version=release-$ver
 if [ "$ver" == "HEAD" ]; then
   git_version=$ver
 fi
-git archive --format=tar $git_version | (cd $pkgdir && tar xf - --exclude tools)
+git archive --format=tar $git_version | (cd $pkgdir && tar xf - --exclude tools --exclude .gitignore)
 
 
 pushd $pkgdir > /dev/null

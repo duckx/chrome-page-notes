@@ -1,34 +1,31 @@
-<!DOCTYPE html>
-<!--
-* Author: Manu Garg <manugarg@gmail.com>
--->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="common.css">
     <link rel="stylesheet" type="text/css" href="popup.css">
-    <script src="popup.js">
-   </script>
-    <title>Page Notes</title>
+    <script src="popup.js"></script>
+    <title>
+      Page Notes
+    </title>
   </head>
   <body class="popup">
-    <div id="notes" class="not-editable">
+    <div id="notes" class="not-editable"></div>
+    <div id="checkbox-div">
+      <label><input type="checkbox" name="sitelevel" id="sitelevel"> <span id="sitelevel_label">Apply to all pages of this site.</span></label><br>
+      <div id="encryption-option">
+        <label><input type="checkbox" name="encrypt" id="encrypt"> <span id="encrypt_label">Encrypt</span></label><br>
+      </div>
+      <div id="encrypt-passphrase-div" style="display:none">
+        <label>Encrypt Passphrase:&nbsp; <input type="password" maxlength="20" style="width:130px;float:right" id="encrypt-passphrase"></label><br>
+        <label>Re-enter: <input type="password" maxlength="20" style="width:130px;float:right" id="verify-passphrase"></label><br>
+      </div>
     </div>
-    <div id="sitelevel-div">
-      <label><input type="checkbox" name="sitelevel" id="sitelevel"/>
-	      <span id="sitelevel_label">Apply to all pages of this site.</span></label>
+    <div id="decrypt-passphrase-div" style="display:none">
+      <label>Decrypt Passphrase:&nbsp; <input type="password" maxlength="20" style="width:130px;float:right" id="decrypt-passphrase"></label>
     </div>
+    <div id="warning" class="warning"></div>
     <div id="control-div">
-      <button id="edit" value="Edit" style="width:45px">
-        Edit
-      </button>
-      <button id="delete" value="Delete">
-        Delete
-      </button>
-      <a href="allnotes.html" target="_blank"
-        title="All page notes">All Notes</a>
-      <a id="setup-sync" target="_blank" href="options.html"
-        style="visibility:hidden;"
-        title="Click here to set up sync to Google Drive">Setup Sync</a>
+      <button id="edit" value="Edit" style="width:60px">Edit</button> <input id="delete" type=image src="icons/delete.png"><a href="allnotes.html" target="_blank" title="All page notes">All Notes</a> <a id="setup-sync" target="_blank" href="options.html" style="visibility:hidden;" title="Click here to set up sync to Google Drive" name="setup-sync">Setup Sync</a>
     </div>
   </body>
 </html>

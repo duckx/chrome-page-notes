@@ -3,47 +3,76 @@
 * Author: Manu Garg <manugarg@gmail.com>
 -->
 <html>
-  <head>
-    <title>Options</title>
-    <link rel="stylesheet" type="text/css" href="common.css">
-    <script src="options.js">
-    </script>
-  </head>
+<head>
+  <title>Options</title>
+  <link rel="stylesheet" type="text/css" href="common.css">
+  <link rel="stylesheet" type="text/css" href="options.css">
+  <script type="text/javascript" src="options.js"></script>
+  <script type="text/javascript" src="relnotes.js"></script>
+</head>
 
-  <body>
-    <div id="outer" align="center">
-      <div id="error" style="display:inline; background-color:yellow">
-      </div>
+<body>
+  <div id="outer" align="center">
+    <div id="error" style="display:inline; background-color:yellow">
     </div>
-    <h1>
-      <img src="icons/icon32.png" width=32px>
-        Page Notes
-      </img>
-    </h1>
-    <h2>Sync Status and Setup</h2>
-    <p>
-      You can sync your 'page notes' to your Google Drive. This
-      feature can be used to sync page notes between multiple computers.
-    </p>
-    <p>
-      <b>Sync Status: </b>
-      <span id="sync_status"></span>
-      <button id="sync_now">Sync Now</button>
-    </p>
-    <p>
-      <button id="setup_sync">Setup Sync</button>
-      <button id="showdebug" name="show">Show debug info</button>
-      <pre id="debug"></pre>
-    </p>
-    <h2>Page Notes Data</h2>
-    <p>
-      <a style="padding-left: 4px;" href="allnotes.html">All Page Notes</a>
-    </p>
-    <p>
-      <button id="clear_local">
-        Clear Local Data
-      </button>
-    </p>
-  </body>
+  </div>
+  <h1>
+    <img src="icons/icon_48.png" width=32px> Page Notes
+  </h1>
+  <!-- Sync Related Options -->
+  <h2>Sync Status and Setup</h2>
+  <p>
+    You can sync your 'page notes' to your Google Drive. This
+    feature can be used to sync page notes between multiple computers.
+  </p>
+  <p>
+    <b>Sync Status: </b>
+    <span id="sync_status"></span>
+    <button id="sync_now">Sync Now</button>
+  </p>
+  <p>
+    <button id="setup_sync">Setup Sync</button>
+    <span id="show_debug" class="show_hide">Debug info</span>
+    <pre id="debug" style="display:none"></pre>
+  </p>
+    
+  <!-- Local data -->
+  <h2>Page Notes Data</h2>
+  <p>
+    <a href="allnotes.html">Access All Your Notes</a>
+  </p>
+  <p>
+    <button id="clear_local">
+      Clear Local Data
+    </button>
+  </p>
+    
+  <!-- Feature Options -->
+  <h2>Settings</h2>
+  <label>
+    Hide the option to encrypt page notes
+    <input type=checkbox class=feature_option id=disable_encryption>
+  </label>
+  <label id="show_enc_tooltip" class="show_hide">(More)</label>
+  <br/>
+  <div id=enc_tooltip class=tooltip style="display:none">
+    Encryption is an experimental feature. Your notes are encrypted with a passphrase that is not stored anywhere. To decrypt, you'll have to provide the same passphrase. If you forget the passphrase, your notes cannot be recovered.<br/>
+  </div>
+  <label>  
+    Use old browser icons
+    <input type=checkbox class=feature_option id=old_icons>
+  </label>
+      
+  <!-- Contact -->
+  <h2>Feedback / Discussion</h2>
+  <p>I have put in a lot of effort in making Page Notes useful for most of us and I'd love to hear what you think about it. Please review the extension at its <a href="https://chrome.google.com/webstore/detail/page-notes/omjdheidbhoghpfdnndkgoelfiogjfla?hl=en-US">webstore page</a>.</p>
+  <p>Please subscribe to <a href="https://groups.google.com/forum/#!forum/pagenotes"> pagenotes@googlegroups.com</a> for new release announcements and other discussion.</p>
+  
+  <!-- Release Notes -->
+  <h2>Release Notes</h2>
+  <details>
+    <summary>Release Notes</summary>
+    <div style="width:800px" id=relnotes></div>
+  </details>
+</body>
 </html>
-

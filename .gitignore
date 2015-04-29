@@ -1,4 +1,7 @@
 .c9revisions
 .settings
+_site
+Gemfile.lock
 tools/packages
 tools/releases
+.DS_Store

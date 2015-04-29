@@ -1,23 +1,21 @@
 {
   "name": "Page Notes",
-  "version": "2.3.3",
+  "version": "2.4.4",
   "manifest_version": 2,
   "description": "Take notes for web pages and access them with a single click whenever you visit those web pages again. (Syncs to Google Drive)",
   "background": {
-     "scripts": ["gfile.js", "pagenotes.js", "oauth2.js", "background.js"]
+     "scripts": ["aes.js", "gfile.js", "options_db.js", "pagenotes_db.js", "oauth2.js", "background.js"]
   },
   "options_page": "options.html",
   "browser_action": {
-    "default_icon": "icons/icon19.png",
     "default_title": "Page Notes",
     "default_popup": "popup.html"
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "19": "icons/icon19.png",
-    "32": "icons/icon32.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/icon_16.png",
+    "19": "icons/icon_19.png",
+    "48": "icons/icon_48.png",
+    "128": "icons/icon_128.png"
   },
   "permissions": [
     "tabs",

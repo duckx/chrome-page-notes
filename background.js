@@ -1,20 +1,7 @@
 /*
- * Copyright 2012 Google Inc. All Rights Reserved.
+ * Copyright 2012 Manu Garg.
  * @author manugarg@google.com (Manu Garg)
-
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
-
+ 
  * Directive for JSLint, so that it doesn't complain about these names not being
  * defined:
  */
@@ -30,6 +17,7 @@ var GREEN_COLOR = {'color': [42, 115, 109, 255]};
 
 var oauth = null;
 var pageNotes = new PageNotes();
+var options = new Options();
 
 function setUpOauth() {
   oauth = new OAuth2({
@@ -49,7 +37,6 @@ var debug = {
 };
 
 var lastSyncStatus;
-chrome.browserAction.setBadgeText({'text': 'pn'});
 
 // Update badge text on tab change.
 chrome.tabs.onSelectionChanged.addListener(function (tabId) {
@@ -61,10 +48,25 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeinfo, tab) {
   updateBadgeForTab(tab);
 });
 
+
 function getHostFromUrl(url) {
   var a_element = document.createElement("a");
   a_element.href = url;
   return a_element.hostname;
+}
+
+function setIcon(tab, suffix, badgeText) {
+  chrome.browserAction.setIcon({
+    path: {
+      19: 'icons/icon' + suffix + '_19.png',
+      38: 'icons/icon' + suffix + '_38.png'
+    },
+    tabId: tab.id
+  });
+  chrome.browserAction.setBadgeText({
+    'text': badgeText,
+    'tabId': tab.id
+  });
 }
 
 function updateBadgeForTab(tab) {
@@ -72,9 +74,17 @@ function updateBadgeForTab(tab) {
   var tabHost = getHostFromUrl(tabUrl);
   var pn = pageNotes.get(tabUrl) || pageNotes.get(tabHost);
   if (pn) {
-    chrome.browserAction.setBadgeText({'text': 'pn', 'tabId': tab.id});
+    if (bgPage.options.get('old_icons')) {
+      setIcon(tab, '_old', 'pn');
+    } else {
+      setIcon(tab, '_filled', '');
+    }
   } else {
-    chrome.browserAction.setBadgeText({'text': '0', 'tabId': tab.id});
+    if (bgPage.options.get('old_icons')) {
+      setIcon(tab, '_old', '0');
+    } else {
+      setIcon(tab, '', '');
+    }
   }
 }
 
@@ -89,11 +99,14 @@ function getRemoteFile() {
 function setVisualCues() {
   if (getSyncFailCount() >= 2) {
     chrome.browserAction.setBadgeBackgroundColor(RED_COLOR);
-    chrome.browserAction.setTitle({'title': 'Page Notes - Sync is not ' +
-                                            'happening.'});
+    chrome.browserAction.setTitle({
+      'title': 'Page Notes - Sync is not ' + 'happening.'
+    });
   } else {
     chrome.browserAction.setBadgeBackgroundColor(GREEN_COLOR);
-    chrome.browserAction.setTitle({'title': 'Page Notes'});
+    chrome.browserAction.setTitle({
+      'title': 'Page Notes'
+    });
   }
 }
 
@@ -246,14 +259,19 @@ function getSyncFailCount() {
 }
 
 function init() {
+  versionTracking();
   convertPageNotes();
   handleFirstRun();
-  chrome.tabs.getSelected(null, updateBadgeForTab);
+  handleIconsUpdate();
+  //chrome.tabs.getSelected(null, updateBadgeForTab);
   sync();
 }
 
 // TODO(manugarg): Remove after upgrade to > 2.2.3 is complete
 function convertPageNotes() {
+  if (!pageNotes.getSource()) {
+    return;
+  }
   var pageNotesString = convertPageNotesString(pageNotes.getSource());
   if (pageNotesString !== pageNotes.getSource()) {
     pageNotes.setSource(pageNotesString);
@@ -276,6 +294,20 @@ function convertPageNotesString(pageNotesString) {
   return JSON.stringify(obj);
 }
 
+function versionTracking() {
+  var manifest = chrome.runtime.getManifest();
+  if (!localStorage.currentVersion || localStorage.currentVersion !== manifest.version) {
+    localStorage.lastVersion = localStorage.currentVersion;
+    localStorage.currentVersion = manifest.version;
+  }
+}
+
+function handleIconsUpdate() {
+  if (!localStorage.warnedAboutIcons) {
+    chrome.tabs.create({'url': chrome.extension.getURL('options.html')});
+  }
+}
+
 function handleFirstRun() {
   if (!localStorage.runOnce) {
     localStorage.runOnce = true;
@@ -286,37 +318,33 @@ function handleFirstRun() {
   }
 }
 
-function deleteButton(name, key, callback, warningMessage) {
-  var button = document.createElement('button');
-  button.className = 'deleteB';
-  button.innerHTML = name;
-
-  button.addEventListener('click', function() {
-    if (this.innerHTML === 'No') {
-      callback();
-      return;
-    }
-    if (this.innerHTML !== 'Yes' && this.innerHTML !== 'No') {
-      var deleteBlock = this.parentNode;
-      while (deleteBlock.firstChild) {
-        deleteBlock.removeChild(deleteBlock.firstChild);
-      }
-
-      deleteBlock.innerHTML = warningMessage;
-
-      var noButton = deleteButton('No', key, callback, '');
-      deleteBlock.appendChild(noButton);
-
-      var yesButton = deleteButton('Yes', key, callback, '');
-      deleteBlock.appendChild(yesButton);
-      return;
-    }
-    pageNotes.remove(key);
-    localStorage.lastModTime = new Date().getTime();
+function deleteButtonHandler(elem, key, callback, warningMessage) {
+  if (elem.innerHTML === 'No') {
     callback();
-  });
+    return;
+  }
+  if (elem.innerHTML !== 'Yes' && elem.innerHTML !== 'No') {
+    var deleteBlock = elem.parentNode;
+    // Clear parent div.
+    while (deleteBlock.firstChild) {
+      deleteBlock.removeChild(deleteBlock.firstChild);
+    }
+    deleteBlock.innerHTML = warningMessage;
 
-  return button;
+    var confirmButtons = ['Yes', 'No'];
+    for (var i = 0; i < confirmButtons.length; i++) {
+      var button = document.createElement('button');
+      button.innerHTML = confirmButtons[i];
+      button.addEventListener('click', function() {
+        deleteButtonHandler(this, key, callback, '');
+      }); 
+      deleteBlock.appendChild(button);
+    }
+    return;
+  }
+  pageNotes.remove(key);
+  localStorage.lastModTime = new Date().getTime();
+  callback();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
